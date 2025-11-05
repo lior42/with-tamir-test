@@ -1,0 +1,34 @@
+{
+  "name": "minimal-ts-node-template",
+  "version": "1.0.0",
+  "description": "An opinionated Node.js project template using TypeScript, with the goal of having zero runtime dependencies.",
+  "main": "dist/main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lior42/minimal-ts-node-template"
+  },
+  "scripts": {
+    "build": "esbuild main=./src/app/index.ts --bundle --platform=node --packages=external --outdir=dist --format=esm",
+    "build:production": "esbuild main=./src/app/index.ts --bundle --platform=node --packages=external --outdir=dist --format=esm --minify",
+    "dev:build": "esbuild main=./src/app/index.ts --bundle --platform=node --packages=external --outdir=dist --format=esm --watch",
+    "dev:serve": "nodemon --exec \"node --env-file-if-exists=.env\" ./dist/main.js",
+    "dev": "concurrently \"npm:dev:build\" \"npm:dev:serve\"",
+    "start": "node --env-file-if-exists=.env ./dist/main.js",
+    "start:production": "NODE_ENV=production node ./dist/main.js",
+    "biome": "biome check --write"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@biomejs/biome": "2.2.6",
+    "@types/node": "^24.7.2",
+    "concurrently": "^9.2.1",
+    "esbuild": "^0.25.10",
+    "nodemon": "^3.1.10"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}

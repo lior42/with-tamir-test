@@ -1,0 +1,8 @@
+# folders
+node_modules
+dist
+
+# files
+.env
+# !important - probably need to remove this line in real usage, its for the template only
+package-lock.json
