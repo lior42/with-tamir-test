@@ -8,14 +8,15 @@
     "url": "https://github.com/lior42/minimal-ts-node-template"
   },
   "scripts": {
-    "build": "esbuild main=./src/app/index.ts --bundle --platform=node --packages=external --outdir=dist --format=esm",
-    "build:production": "esbuild main=./src/app/index.ts --bundle --platform=node --packages=external --outdir=dist --format=esm --minify",
-    "dev:build": "esbuild main=./src/app/index.ts --bundle --platform=node --packages=external --outdir=dist --format=esm --watch",
+    "build": "esbuild main=./src/app/index.js --bundle --platform=node --packages=external --outdir=dist --format=esm",
+    "build:production": "esbuild main=./src/app/index.js --bundle --platform=node --packages=external --outdir=dist --format=esm --minify",
+    "dev:build": "esbuild main=./src/app/index.js --bundle --platform=node --packages=external --outdir=dist --format=esm --watch",
     "dev:serve": "nodemon --exec \"node --env-file-if-exists=.env\" ./dist/main.js",
     "dev": "concurrently \"npm:dev:build\" \"npm:dev:serve\"",
     "start": "node --env-file-if-exists=.env ./dist/main.js",
-    "start:production": "NODE_ENV=production node ./dist/main.js",
-    "biome": "biome check --write"
+    "start:no-env-file": "node ./dist/main.js",
+    "biome": "biome check --write",
+    "scripts:add-users": "tsx --env-file-if-exists=.env ./src/scripts/add-users.js"
   },
   "keywords": [],
   "author": "",
@@ -23,12 +24,27 @@
   "type": "module",
   "devDependencies": {
     "@biomejs/biome": "2.2.6",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.5",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.7.2",
+    "@types/regex-escape": "^3.4.1",
     "concurrently": "^9.2.1",
     "esbuild": "^0.25.10",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "tsx": "^4.20.6"
   },
   "engines": {
     "node": ">=22.0.0"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.19.3",
+    "regex-escape": "^3.4.11",
+    "zod": "^4.1.12"
   }
 }
