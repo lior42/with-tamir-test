@@ -41,10 +41,25 @@ router.post(
       env.BCRYPT_SALT,
     );
     filledUp.password = encryptedPassword;
-    const saveObj = await UsersModel.create(filledUp);
-    const baseReturnObj = await UsersModel.findById(saveObj._id)
-      .select("-password")
-      .lean();
+    const createResult = await safePromiseWrapper(UsersModel.create(filledUp));
+    if (createResult.hasError) {
+      throw new HttpError(
+        "CONFLICT",
+        "Email Already Registered",
+        undefined,
+        { email: info.body.email },
+        true,
+      );
+    }
+    const saveObj = createResult.result;
+
+    const safeBaseReturn = await safePromiseWrapper(
+      UsersModel.findById(saveObj._id).select("-password").lean(),
+    );
+    if (safeBaseReturn.hasError) {
+      throw new HttpError("SERVICE_UNAVAILABLE", "Data Not Accessible");
+    }
+    const baseReturnObj = safeBaseReturn.result;
     if (baseReturnObj === null) {
       throw new HttpError("INTERNAL_SERVER_ERROR", "Unknown error was thrown");
     }
@@ -114,7 +129,7 @@ router.delete(
     );
     if (deleteResult.hasError) {
       throw new HttpError(
-        "FAILED_DEPENDENCY",
+        "SERVICE_UNAVAILABLE",
         "Delete Was Not Successful, try again later",
       );
     }
@@ -159,7 +174,7 @@ router.get(
     );
 
     if (query.hasError) {
-      throw new HttpError("FAILED_DEPENDENCY", "Database inaccessible");
+      throw new HttpError("SERVICE_UNAVAILABLE", "Database inaccessible");
     }
 
     const totalRecords = await UsersModel.countDocuments({
