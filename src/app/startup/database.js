@@ -31,6 +31,6 @@ export async function initialDb() {
     const exitCode = Number(hasError);
     const prefix = hasError ? "un" : "";
     logger.info(logContext, `Closed mongo connection ${prefix}successfully`);
-    process.exitCode = exitCode;
+    process.exit(exitCode);
   });
 }

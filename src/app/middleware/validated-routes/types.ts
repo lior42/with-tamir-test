@@ -40,5 +40,5 @@ type HandlerInput<T extends ValidationOptions> = {
 export type Handler<T extends ValidationOptions> = (
   input: HandlerInput<T>,
 ) => T["output"] extends z.ZodType
-  ? z.infer<T["output"]> | Promise<z.input<T["output"]>>
+  ? z.input<T["output"]> | Promise<z.input<T["output"]>>
   : any;
